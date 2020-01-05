@@ -1,0 +1,28 @@
+<h1 id="tableLabel">Latest Hacker News Stories</h1>
+
+<p>Here is the latest stories from Hacker News.</p>
+
+<p *ngIf="!stories"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="stories">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Text</th>
+      <th>Author</th>
+      <th>Date</th>
+      <th>Comments</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let story of stories">
+      <td><a href="{{ story.url }}"  target="_blank">{{ story.title }}</a></td>
+      <td><div [innerHtml]="story.text"></div></td>
+      <td>{{ story.by }}</td>
+      <td>{{ story.time }}</td>
+      <td>{{ story.descendants }}</td>
+    </tr>
+  </tbody>
+</table>
+<button [hidden]="!pageNumber" (click)="previousPage()">Previous</button>
+<button (click)="nextPage()">Next</button>
