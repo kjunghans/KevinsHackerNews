@@ -13,6 +13,7 @@ namespace HackerNewsService
     {
         private readonly IMemoryCache _cache;
         private readonly string storyIdsKey = "HackerNews.StoryIds";
+        private readonly double expirationInSeconds = 600;
 
         /// <summary>
         /// Constructor for <see cref="HackerNewsCache"/>.
@@ -47,7 +48,7 @@ namespace HackerNewsService
         /// <param name="ids"></param>
         public void SetLatestStoryIds(List<int> ids)
         {
-            _cache.Set<List<int>>(storyIdsKey, ids);
+            _cache.Set<List<int>>(storyIdsKey, ids, TimeSpan.FromSeconds(expirationInSeconds));
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace HackerNewsService
         /// <param name="newsItem"></param>
         public void SetNewsItem(HackerNewsItem newsItem)
         {
-            _cache.Set<HackerNewsItem>(newsItem.Id, newsItem);
+            _cache.Set<HackerNewsItem>(newsItem.Id, newsItem, TimeSpan.FromSeconds(expirationInSeconds));
         }
     }
 }
