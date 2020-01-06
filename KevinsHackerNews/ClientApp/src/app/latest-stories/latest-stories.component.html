@@ -13,7 +13,10 @@
   </thead>
   <tbody>
     <tr *ngFor="let story of stories">
-      <td><div *ngIf="!story.text"><a href="{{ story.url }}" target="_blank">{{ story.title }}</a></div><div *ngIf="story.text"><strong>{{story.title}}</strong><br /><div [innerHtml]="story.text"></div></div></td>
+      <td>
+        <div *ngIf="!story.text"><a href="{{ story.url }}" target="_blank">{{ story.title }}</a></div>
+        <div *ngIf="story.text"><strong>{{story.title}}</strong><br /><div [innerHtml]="story.text"></div></div>
+      </td>
       <td>{{ story.by }}</td>
     </tr>
   </tbody>

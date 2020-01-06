@@ -59,6 +59,7 @@ namespace HackerNewsService
             if (idList == null)
                 return newsItems;
             int lastItem = startIndex + numItems;
+            //Make sure we have not gone out of bounds
             if (lastItem > idList.Count)
                 lastItem = idList.Count;
             for(int i = startIndex; i < lastItem; i++)

@@ -7,6 +7,10 @@ using System.Diagnostics;
 
 namespace HackerNewsService.Test
 {
+    /// <summary>
+    /// An integration test for the <see cref="HackerNewsService"/>.  These tests actually retrieve items
+    /// via the Hacker News API.
+    /// </summary>
     public class IntegrationTestHackerNewsService
     {
         [Fact]
