@@ -39,8 +39,10 @@ namespace HackerNewsService
             List<int> idList = GetNewsListIds();
             if (idList == null)
                 return newsItems;
-            
-            for(int i = startIndex; i < idList.Count && i < startIndex + numItems; i++)
+            int lastItem = startIndex + numItems;
+            if (lastItem > idList.Count)
+                lastItem = idList.Count;
+            for(int i = startIndex; i < lastItem; i++)
             {
                 var newsItem = GetNewsItem(idList[i]);
                 if (newsItem != null)

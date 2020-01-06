@@ -32,7 +32,7 @@ namespace HackerNewsService.Test
             stopWatchWithCache.Stop();
             Assert.Equal(numItems, newsItems.Count);
             TimeSpan tsWithCache = stopWatchWithCache.Elapsed;
-            int lagTimeInMs = 3000;  //Should at least be 3 seconds faster
+            int lagTimeInMs = 500;  //Should at least be a half second faster
             Assert.True(tsWithCache.TotalMilliseconds < tsWithoutCache.TotalMilliseconds - lagTimeInMs);
 
         }
