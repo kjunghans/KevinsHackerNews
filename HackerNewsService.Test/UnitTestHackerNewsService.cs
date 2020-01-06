@@ -43,8 +43,9 @@ namespace HackerNewsService.Test
                 storyList.Add(i);
             HackerNewsItem newsItem = new HackerNewsItem() { Id = 1, Text = "My story", Type = "story" };
             var client = MockRestClient(HttpStatusCode.OK, storyList, newsItem);
+            var cache = new HackerNewsCache();
 
-            IHackerNewsService newsService = new HackerNewsService(client);
+            IHackerNewsService newsService = new HackerNewsService(client, cache);
             int startIndex = 0;
             int numItems = 10;
             List<HackerNewsItem> newsItems = newsService.GetLatestNews(startIndex, numItems);

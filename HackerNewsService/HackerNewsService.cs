@@ -6,28 +6,43 @@ namespace HackerNewsService
 {
     public class HackerNewsService : IHackerNewsService
     {
-        private readonly IRestClient client;
+        private readonly IRestClient _client;
+        private readonly IHackerNewsCache _cache;
 
-        public HackerNewsService(IRestClient restClient)
+        public HackerNewsService(IRestClient restClient, IHackerNewsCache cache)
         {
-            client = restClient;
+            _client = restClient;
+            _cache = cache;
         }
 
-
-        public List<HackerNewsItem> GetLatestNews(int startIndex, int numItems)
+        private List<int> GetNewsListIds()
         {
-            List<HackerNewsItem> newsItems = new List<HackerNewsItem>();
+            List<int> idList = _cache.GetLatestStoryIds();
+            if (idList != null)
+                return idList;
             var request = new RestRequest("topstories.json?print=pretty}", Method.GET);
-            var response = client.Execute<List<int>>(request);
+            var response = _client.Execute<List<int>>(request);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 throw new HackerNewsApiException($"The Hacker News API returned a status code of {response.StatusCode}");
 
             if (response.Data == null || response.Data.Count == 0)
+                return null;
+            _cache.SetLatestStoryIds(response.Data);
+
+            return response.Data;
+        }
+
+        public List<HackerNewsItem> GetLatestNews(int startIndex, int numItems)
+        {
+            List<HackerNewsItem> newsItems = new List<HackerNewsItem>();
+            List<int> idList = GetNewsListIds();
+            if (idList == null)
                 return newsItems;
-            for(int i = startIndex; i < startIndex + numItems; i++)
+            
+            for(int i = startIndex; i < idList.Count && i < startIndex + numItems; i++)
             {
-                var newsItem = GetNewsItem(response.Data[i]);
+                var newsItem = GetNewsItem(idList[i]);
                 if (newsItem != null)
                     newsItems.Add(newsItem);
             }
@@ -35,12 +50,15 @@ namespace HackerNewsService
             return newsItems;
         }
 
+
         public HackerNewsItem GetNewsItem(int id)
         {
-            HackerNewsItem newsItem = null;
+            HackerNewsItem newsItem = _cache.GetNewsItem(id);
+            if (newsItem != null)
+                return newsItem;
             var request = new RestRequest("item/{id}.json?print=pretty}", Method.GET);
             request.AddUrlSegment("id", id);
-            var response = client.Execute<HackerNewsItem>(request);
+            var response = _client.Execute<HackerNewsItem>(request);
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 throw new HackerNewsApiException($"The Hacker News API returned a status code of {response.StatusCode}");
@@ -49,6 +67,7 @@ namespace HackerNewsService
                 return newsItem;
 
             newsItem = response.Data;
+            _cache.SetNewsItem(newsItem);
             return newsItem;
 
         }
