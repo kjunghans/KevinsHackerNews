@@ -28,6 +28,7 @@ export class LatestStoriesComponent {
   public nextPage() {
     this.pageNumber++;
     this.startIndex = this.pageNumber * this.pageSize;
+    this.stories = null;
     this.getStories();
   }
 
@@ -35,6 +36,7 @@ export class LatestStoriesComponent {
     if (this.pageNumber > 0) {
       this.pageNumber--;
       this.startIndex = this.pageNumber * this.pageSize;
+      this.stories = null;
       this.getStories();
     }
   }
