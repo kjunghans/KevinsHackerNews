@@ -4,17 +4,30 @@ using System.Collections.Generic;
 
 namespace HackerNewsService
 {
+    /// <summary>
+    /// A concrete implementation of the <see cref="IHackerNewsService"/> that uses the 
+    /// Hacker News API [https://github.com/HackerNews/API].
+    /// </summary>
     public class HackerNewsService : IHackerNewsService
     {
         private readonly IRestClient _client;
         private readonly IHackerNewsCache _cache;
 
+        /// <summary>
+        /// Constructs a new instance of <see cref="HackerNewsService"/>.
+        /// </summary>
+        /// <param name="restClient">A concrete implementation of <see cref="IRestClient"/> used to communicate with Hacker News API.</param>
+        /// <param name="cache">A concrete implementation of <see cref="IHackerNewsCache"/> used for caching news items.</param>
         public HackerNewsService(IRestClient restClient, IHackerNewsCache cache)
         {
             _client = restClient;
             _cache = cache;
         }
 
+        /// <summary>
+        /// Retrieves a list of id's for the latest stories from the Hacker News API.
+        /// </summary>
+        /// <returns>Returns a list of the latest story id's.</returns>
         private List<int> GetNewsListIds()
         {
             List<int> idList = _cache.GetLatestStoryIds();
@@ -33,6 +46,12 @@ namespace HackerNewsService
             return response.Data;
         }
 
+        /// <summary>
+        /// Retrieves the latest news stories from the Hacker News API.
+        /// </summary>
+        /// <param name="startIndex">A zero based index on where to start retrieving the news items from.</param>
+        /// <param name="numItems">The number of items to retrieve.</param>
+        /// <returns>A list of news items <see cref="HackerNewsItem"/></returns>
         public List<HackerNewsItem> GetLatestNews(int startIndex, int numItems)
         {
             List<HackerNewsItem> newsItems = new List<HackerNewsItem>();
@@ -52,7 +71,11 @@ namespace HackerNewsService
             return newsItems;
         }
 
-
+        /// <summary>
+        /// Retrieves a single news item from the Hacker News API.
+        /// </summary>
+        /// <param name="id">The id of the story.</param>
+        /// <returns>Returns a news item <see cref="HackerNewsItem"/> that matches the id.</returns>
         public HackerNewsItem GetNewsItem(int id)
         {
             HackerNewsItem newsItem = _cache.GetNewsItem(id);
@@ -75,17 +98,32 @@ namespace HackerNewsService
         }
     }
 
+    /// <summary>
+    /// Exception thrown if there is a problem reaching the Hacker News API.
+    /// </summary>
     public class HackerNewsApiException : Exception
     {
+        /// <summary>
+        /// Constructor for <see cref="HackerNewsApiException"/>
+        /// </summary>
         public HackerNewsApiException()
         {
         }
 
+        /// <summary>
+        /// Constructor for <see cref="HackerNewsApiException"/>
+        /// </summary>
+        /// <param name="message">Message for exception</param>
         public HackerNewsApiException(string message)
             : base(message)
         {
         }
 
+        /// <summary>
+        /// Constructor for <see cref="HackerNewsApiException"/>
+        /// </summary>
+        /// <param name="message">Message for exception</param>
+        /// <param name="inner">Inner exception</param>
         public HackerNewsApiException(string message, Exception inner)
             : base(message, inner)
         {
