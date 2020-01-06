@@ -1,4 +1,4 @@
-<h1 id="tableLabel">Latest Hacker News Stories</h1>
+<h1 id="tableLabel">Kevin's Hacker News</h1>
 
 <p>Here is the latest stories from Hacker News.</p>
 
@@ -8,19 +8,13 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>Text</th>
       <th>Author</th>
-      <th>Date</th>
-      <th>Comments</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let story of stories">
-      <td><a href="{{ story.url }}"  target="_blank">{{ story.title }}</a></td>
-      <td><div [innerHtml]="story.text"></div></td>
+      <td><div *ngIf="!story.text"><a href="{{ story.url }}" target="_blank">{{ story.title }}</a></div><div *ngIf="story.text"><strong>{{story.title}}</strong><br /><div [innerHtml]="story.text"></div></div></td>
       <td>{{ story.by }}</td>
-      <td>{{ story.time }}</td>
-      <td>{{ story.descendants }}</td>
     </tr>
   </tbody>
 </table>

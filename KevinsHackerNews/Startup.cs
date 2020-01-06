@@ -31,7 +31,7 @@ namespace KevinsHackerNews
             });
 
             services.AddScoped<HackerNewsService.IHackerNewsService, HackerNewsService.HackerNewsService>();
-            services.AddScoped<IHackerNewsCache, HackerNewsCache>();
+            services.AddSingleton<IHackerNewsCache, HackerNewsCache>();
             services.AddScoped<IRestClient>(x => new RestClient("https://hacker-news.firebaseio.com/v0"));
             services.AddTransient(ctx =>
                 new HackerNewsController(new HackerNewsService.HackerNewsService(new RestClient("https://hacker-news.firebaseio.com/v0"), new HackerNewsCache())));

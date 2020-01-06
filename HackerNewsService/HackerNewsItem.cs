@@ -9,6 +9,7 @@ namespace HackerNewsService
         public int Id { get; set; }
         public bool Deleted { get; set; }
         public string Type { get; set; }
+        public string By { get; set; }
         public DateTime Time { get; set; }
         public string Text { get; set; }
         public bool Dead { get; set; }
